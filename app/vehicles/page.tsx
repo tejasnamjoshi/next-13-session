@@ -1,30 +1,23 @@
-import Link from "next/link";
 import React from "react";
-import styles from './page.module.css';
+import Navigation from "ui/Navigation";
 
 const getData = async () => {
-  const resp = await fetch("https://swapi.dev/api/vehicles");
-
-  return resp.json();
+  const res = await fetch("https://swapi.dev/api/vehicles");
+  return res.json();
 };
 
+const formatVehicleData = (results: any) => {
+    return results.map((vehicle: any) => ({ title: vehicle.name, url: `vehicles/${vehicle.url.split('/')[5]}` }));
+}
+
 const Vehicles = async () => {
-  const { results: vehiclesData } = await getData();
+  const { results } = await getData();
+  
   return (
-    <div>
-      <h1>Vehicles</h1>
-      <ul>
-        {vehiclesData.map((vehicle: { url: string; name: string }) => {
-            const start = 'https://swapi.dev/api/vehicles/'.length;
-            const id = vehicle.url.substring(start, vehicle.url.length - 1);
-            return (
-                <li key={id}>
-                  <Link className={`${styles.vehicle}`} href={`/vehicles/${id}`}>{vehicle.name}</Link>
-                </li>
-              )
-        })}
-      </ul>
-    </div>
+    <>
+      <h1>List of Vehicles</h1>
+      <Navigation links={formatVehicleData(results)} />
+    </>
   );
 };
 

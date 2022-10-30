@@ -1,19 +1,27 @@
-"use client";
-
-import Link from "next/link";
+import Navigation from "ui/Navigation";
 import "./globals.css";
 import styles from "./layout.module.css";
-import { usePathname } from "next/navigation";
-import BackButton from "@ui/BackButton/BackButton";
-import { Suspense } from "react";
-import Loading from "./loading";
+
+const links = [
+  {
+      title: 'Home',
+      url: '/'
+  },
+  {
+      title: 'Vehicles',
+      url: '/vehicles'
+  },
+  {
+      title: 'People',
+      url: '/people'
+  },
+];
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
   return (
     <html lang="en">
       <head>
@@ -22,46 +30,14 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <div className={styles.page}>
-          <nav className={styles.sidebar}>
-            {pathname !== "/" && <BackButton className={styles.backButton} />}
-            <ul>
-              <li>
-                <Link
-                  className={`${
-                    pathname === "/" ? styles.sidebarSelected : ""
-                  } ${styles.sidebarItem}`}
-                  href="/"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`${
-                    pathname.includes('/vehicles') ? styles.sidebarSelected : ""
-                  } ${styles.sidebarItem}`}
-                  href="/vehicles"
-                >
-                  Vehicles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`${
-                    pathname.includes("/people") ? styles.sidebarSelected : ""
-                  } ${styles.sidebarItem}`}
-                  href="/people"
-                >
-                  People
-                </Link>
-              </li>
-            </ul>
+        <header>
+          <div className={styles.header}>NextJS Tutorial App</div>
+          <nav className={styles.navigation}>
+            <Navigation links={links} />
           </nav>
-          <Suspense fallback={<Loading />}>
-            <main>{children}</main>
-          </Suspense>
-        </div>
+        </header>
+        <main className={styles.main}>{children}</main>
+        <footer className={styles.footer}>Created with ❤ at Salucro</footer>
       </body>
     </html>
   );

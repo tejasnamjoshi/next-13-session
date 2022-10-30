@@ -1,20 +1,24 @@
-import React from "react";
+import React from 'react'
 
 const getData = async (id: string) => {
-  const resp = await fetch(`https://swapi.dev/api/vehicles/${id}`);
+  const res = await fetch(`https://swapi.dev/api/vehicles/${id}`);
 
-  return resp.json();
+  return res.json();
 };
 
-const VehicleInfo = async ({ params }: any) => {
-  const info = await getData(params.id);
-  return (
+const Vehicle = async ({ params, searchParams }: any) => {
+  const id = params.id;
+  const vehicle = await getData(id);
+
+  if(searchParams.error) throw new Error('Forced error');
+  
+  return (  
     <div>
-      <h1>Name: {info.name}</h1>
-      <p>Model: {info.model}</p>
-      <p>Crew: {info.crew}</p>
+      <h1>{vehicle.name}</h1>
+      <p>Model: {vehicle.model}</p>
+      <p>Crew: {vehicle.crew}</p>
     </div>
-  );
-};
+  )
+}
 
-export default VehicleInfo;
+export default Vehicle

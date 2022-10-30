@@ -1,35 +1,35 @@
-import Link from 'next/link';
-import React from 'react'
-import styles from './page.module.css';
+"use client";
+
+import React from "react";
+import useSwr from "swr";
+import Navigation from "ui/Navigation";
 
 const getData = async () => {
-  const resp = await fetch('https://swapi.dev/api/people');
+  const res = await fetch("https://swapi.dev/api/people");
 
-  return resp.json();
-}
+  return res.json();
+};
 
-const People = async () => {
-  const { results: peopleData } = await getData();
+const formatPeopleData = (people: any) => {
+  if (!people) return [];
+  const data = people.map((person: any) => ({
+    title: person.name,
+    url: `people/${person.url.split("/")[5]}`,
+  }));
+
+  console.log(data);
+  return data;
+};
+
+const People = () => {
+  const results = useSwr("people", getData);
 
   return (
     <div>
-      <h1>
-        People
-      </h1>
-      <ul>
-        {peopleData.map((person: any) => {
-          const id = person.url.split('/')[5];
-          return (
-            <li key={person.url}>
-              <Link className={styles.people} href={`/people/${id}`}>
-                Name: {person.name}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+      <h1>List of people</h1>
+      <Navigation links={formatPeopleData(results.data?.results)} />
     </div>
-  )
-}
+  );
+};
 
-export default People
+export default People;

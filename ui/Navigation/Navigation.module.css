@@ -1,0 +1,16 @@
+.nav {
+    list-style: none;
+    padding: 0;
+    margin: 2rem;
+}
+
+.navItemLink {
+    padding: 1rem 1.5rem;
+    color: var(--text-color);
+    display: block;
+}
+
+.navItemLink:hover {
+    color: var(--text-color-hover);
+    font-weight: 500;
+}
